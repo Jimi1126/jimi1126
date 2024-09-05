@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run build task
-        run: pnpm run generate
+        run: pnpm run build
       - name: deploy pipelines
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         with:
