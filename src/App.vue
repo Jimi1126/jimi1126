@@ -18,11 +18,6 @@
   --resume-component-gap: 12px;
   --resume-border-radius: 12px;
 }
-html {
-  font-family: KaiTi_GB2312, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
-    sans-serif;
-}
 body {
   margin: 0;
 }

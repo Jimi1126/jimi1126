@@ -332,7 +332,6 @@ onUnmounted(() => {
       &::before,
       &::after {
         font-weight: bold;
-        font-family: fangsong;
         position: absolute;
         top: 65%;
         opacity: 0.5;

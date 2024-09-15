@@ -1,11 +1,12 @@
 // Plugins
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
-import Fonts from 'unplugin-fonts/vite';
+// import Fonts from 'unplugin-fonts/vite';
 import Layouts from 'vite-plugin-vue-layouts';
 import Vue from '@vitejs/plugin-vue';
 import VueRouter from 'unplugin-vue-router/vite';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+// import viteCompression from 'vite-plugin-compression';
 
 // Utilities
 import { defineConfig } from 'vite';
@@ -52,16 +53,13 @@ export default defineConfig({
         configFile: 'src/styles/settings.scss',
       },
     }),
-    Fonts({
-      google: {
-        families: [
-          {
-            name: 'Roboto',
-            styles: 'wght@100;300;400;500;700;900',
-          },
-        ],
-      },
-    }),
+    // viteCompression({
+    //   filter: /\.(js|css|json|txt|ico|svg)(\?.*)?$/i, // 需要压缩的文件
+    //   threshold: 1024, // 文件容量大于这个值进行压缩
+    //   algorithm: 'gzip', // 压缩方式
+    //   ext: 'gz', // 后缀名
+    //   deleteOriginFile: true, // 压缩后是否删除压缩源文件
+    // }),
   ],
   define: { 'process.env': {} },
   resolve: {

@@ -8,7 +8,6 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@mdi/font": "6.2.95",
     "core-js": "^3.34.0",
     "gsap": "^3.12.5",
     "immer": "^10.0.4",
