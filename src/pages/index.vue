@@ -31,8 +31,10 @@
           class="w-100"
           aspect-ratio="16/9"
           cover
-          src="https://r2.jimi1126.cn/img/2024/09/54e8e803c1e051364b9a75ee5863b715.jpg"
-          @load="count++"
+          :src="'https://r2.jimi1126.cn/img/2024/09/54e8e803c1e051364b9a75ee5863b715.jpg'"
+          style="height: 470px"
+          @error="animateImg"
+          @load="animateImg"
         ></v-img>
       </v-card>
     </div>
@@ -47,6 +49,8 @@
           class="w-100"
           aspect-ratio="4/3"
           cover
+          style="height: 228px"
+          @error="count++"
           @load="count++"
         ></v-img>
         <v-card-title>{{ proj.title }}</v-card-title>
@@ -55,7 +59,7 @@
     </div>
     <div class="plans">
       <div class="plan py-4 elevation-3">
-        <v-icon icon="mdi-hand-coin"></v-icon>
+        <v-icon icon="mdi-handshake-outline"></v-icon>
         <span>SERVICES | 服务</span>
         <span>软件开发 & 问题咨询</span>
       </div>
@@ -115,13 +119,13 @@
         >
           <v-expansion-panel
             key="1"
-            title="为什么叫JIMI1126？"
-            text="JIMI 这个名字可不是随便取的，2022 年我的女儿来到了这个世界上，我和爱人决定给她取乳名“小鸡米”，我就理所当然的是“大鸡米”了，1126是我女儿的生日。大家可以叫我“鸡米”、“大鸡米”、“鸡米仔”，我会非常高兴的。"
+            title="本站主要内容是什么？"
+            text="本站主要是知识的分享，在这里可以看到我的最新产品与我在捣鼓什么东西。"
           ></v-expansion-panel>
           <v-expansion-panel
             key="2"
-            title="本站主营什么？"
-            text="本站主要是知识的分享，在这里可以看到我的最新产品与我在捣鼓什么东西。"
+            title="会有哪些新项目吗？"
+            text="目前正在进行中的项目是 Builder For Web，它是一个基于 Vue3 + TypeScript 的前端框架，旨在帮助用户轻松地创建网站、简历、博客等各种类型，目前完成了简历编辑器，并且支持高清导出PDF，后续想看看如何生成一个兼容性高的网站。"
           ></v-expansion-panel>
         </v-expansion-panels>
       </div>
@@ -148,22 +152,22 @@ const {
 const faqLists = ref([]);
 const projects = ref([
   {
-    src: "https://r2.jimi1126.cn/img/2024/09/5a07b3ba8c068e56eafc2e03d1d3f379.jpg",
-    title: "Unitest",
-    text: "可以根据注解自动生成测试文件 npm 包",
-    link: "https://github.com/Jimi1126/unitest",
-  },
-  {
     src: "https://r2.jimi1126.cn/img/2024/09/05f59acacb734550b7786e16d89fdad2.jpg",
-    title: "Print Big Char",
-    text: "将符号转化为大字符 npm 包",
-    link: "https://github.com/Jimi1126/printBigChar",
+    title: "Jimi Blog",
+    text: "一个用 Nuxtjs 搭建的个人博客，能快速搭建自己的博客，主题好看，集成SEO，以及能够自动发布 ",
+    link: "https://blog.jimi1126.cn",
   },
   {
     src: "https://r2.jimi1126.cn/img/2024/09/a121447b3ba241938e5454b9fec52c87.jpg",
-    title: "Encaps Proxy",
-    text: "利用原型实现对象代理与添加通用行为 npm 包",
-    link: "https://github.com/Jimi1126/encaps-proxy",
+    title: "Markdown Processer",
+    text: "一个通过插件方式实现 Markdown 的编辑与转换为 HTML 的网页应用",
+    link: "https://md.jimi1126.cn",
+  },
+  {
+    src: "https://r2.jimi1126.cn/img/2024/09/5a07b3ba8c068e56eafc2e03d1d3f379.jpg",
+    title: "Unitest",
+    text: "可以根据特定注解格式生成测试文件的 CLI",
+    link: "https://github.com/Jimi1126/unitest",
   },
 ]);
 
@@ -172,8 +176,6 @@ function setAnimate() {
   gsapCtx.revert();
   gsapCtx.add(() => {
     buildScrollAnimate("#main .header .introduce > *", animateL2R);
-    buildScrollAnimate(`#main .header .v-img`, animateT2B);
-    buildScrollAnimate(`#main .projects .v-card`, animateTT2B, true);
     buildScrollAnimate("#main .plans  > *", animateTB2T, true);
     buildScrollAnimate("#main .contact", animateB2T);
     buildScrollAnimate("#main .questions .explain", animateL2R);
@@ -181,15 +183,28 @@ function setAnimate() {
   });
 }
 
+function animateImg() {
+  nextTick(() => {
+    gsapCtx.add(() => {
+      buildScrollAnimate(`#main .header .v-img`, animateT2B);
+    });
+  });
+}
+
 const count = ref(0);
 const isMounted = ref(false);
 watchEffect(() => {
-  if (count.value >= 4 && isMounted.value) {
-    setAnimate();
+  if (count.value == 3 && isMounted.value) {
+    nextTick(() => {
+      gsapCtx.add(() => {
+        buildScrollAnimate(`#main .projects .v-card`, animateTT2B, true);
+      });
+    });
   }
 });
 onMounted(() => {
   isMounted.value = true;
+  setAnimate();
 });
 onUnmounted(() => {
   gsapCtx && gsapCtx.revert();
