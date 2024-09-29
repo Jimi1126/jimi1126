@@ -72,7 +72,7 @@
 </template>
 <script lang="ts" setup>
 import { useDark } from "@/hooks/dark";
-import { openLink } from "@/hooks/pureFun";
+import { openLink } from "@/utils/pureFun";
 
 const { isDark } = useDark();
 const wechatQRVisible = ref(false);
@@ -87,14 +87,14 @@ onMounted(() => {
 <style lang="scss" scoped>
 .about {
   width: 100%;
-  padding: $space-page 0;
+  padding: var(--space-page) 0;
   .body {
     width: 100%;
-    max-width: $max-width;
+    max-width: var(--max-width);
     margin: auto;
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: $space-page;
+    gap: var(--space-page);
     line-height: 4em;
     text-transform: capitalize;
     font-style: normal;

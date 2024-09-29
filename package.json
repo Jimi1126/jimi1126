@@ -11,6 +11,7 @@
     "core-js": "^3.34.0",
     "gsap": "^3.12.5",
     "immer": "^10.0.4",
+    "lazysizes": "^5.3.2",
     "roboto-fontface": "*",
     "vue": "^3.4.21",
     "vuetify": "^3.5.8"
@@ -30,6 +31,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.22.0",
     "pinia": "^2.1.7",
+    "postcss-px-to-viewport-8-plugin": "^1.2.5",
     "sass": "^1.71.1",
     "typescript": "^5.4.2",
     "unplugin-auto-import": "^0.17.5",

@@ -2,13 +2,31 @@
   <v-app-bar id="app-header" :color="primaryColor">
     <h1 class="cursor-pointer" @click="goto('/')">JIMI1126</h1>
     <v-spacer></v-spacer>
-    <v-btn text @click="goto('/about')">关于我</v-btn>
-    <v-btn text @click="openLink('https://blog.jimi1126.cn/')">我的博客</v-btn>
+    <v-menu v-if="isMobile()">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-menu"></v-btn>
+      </template>
+      <v-list>
+        <v-list-item @click="openLink('https://blog.jimi1126.cn/')">
+          <v-list-item-title>我的博客</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="goto('/about')">
+          <v-list-item-title>关于我</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <template v-else>
+      <v-btn text @click="openLink('https://blog.jimi1126.cn/')"
+        >我的博客</v-btn
+      >
+      <v-btn text @click="goto('/about')">关于我</v-btn>
+    </template>
     <v-btn
       @click="toggleTheme"
       :icon="isDark() ? 'mdi-weather-night' : 'mdi-weather-sunny'"
     ></v-btn>
   </v-app-bar>
+
   <v-btn
     class="back-to-top"
     icon="mdi-arrow-up-bold"
@@ -19,9 +37,10 @@
 <script lang="ts" setup>
 import { useAnimate } from "@/hooks/animate";
 import { useDark } from "@/hooks/dark";
-import { openLink } from "@/hooks/pureFun";
+import { openLink } from "@/utils/pureFun";
 import { useGoTo } from "vuetify/lib/framework.mjs";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isMobile } from "@/utils/is";
 
 const router = useRouter();
 const goTo = useGoTo();
@@ -99,21 +118,20 @@ onUnmounted(() => {
 </script>
 <style lang="scss" scoped>
 #app-header {
-  text-transform: none;
-  font-style: normal;
-  text-decoration: none;
-  line-height: 1.5em;
+  h1 {
+    font-size: var(--font-size-xl);
+  }
 
   :deep(.v-toolbar__content) {
-    max-width: $max-width;
+    max-width: var(--max-width);
     margin: auto;
   }
 }
 
 .back-to-top {
   position: fixed;
-  bottom: $space-component;
-  right: $space-component;
+  bottom: var(--space-component);
+  right: var(--space-component);
   z-index: 999;
 }
 </style>

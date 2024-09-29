@@ -1,6 +1,6 @@
 <template>
-  <div id="main" class="main">
-    <div class="header">
+  <div id="main" class="main" :class="{ mobile: isMobile() }">
+    <div class="header" :class="{ mobile: isMobile() }">
       <div class="introduce">
         <div class="greet">
           <h1>Hi There,<br />I'm Jimi1126</h1>
@@ -26,38 +26,31 @@
           ></v-btn>
         </div>
       </div>
-      <v-card class="w-100" @click="openLink('https://builder.jimi1126.cn')">
-        <v-img
-          class="w-100"
-          aspect-ratio="16/9"
-          cover
-          :src="'https://r2.jimi1126.cn/img/2024/09/54e8e803c1e051364b9a75ee5863b715.jpg'"
-          style="height: 470px"
-          @error="animateImg"
-          @load="animateImg"
-        ></v-img>
-      </v-card>
+      <div
+        class="slot-div ratio-16-9"
+        @click="openLink('https://builder.jimi1126.cn')"
+      >
+        <img
+          data-src="https://r2.jimi1126.cn/hotlink-ok/img/2024/09/24dd5fcf63f16748bf156c8442595712.jpg"
+          class="lazyload"
+          alt=" Builder For Web 概念图"
+        />
+      </div>
     </div>
-    <div class="projects">
+    <div class="projects" :class="{ mobile: isMobile() }">
       <v-card
         v-for="(proj, i) in projects"
         :key="i"
         @click="openLink(proj.link)"
       >
-        <v-img
-          :src="proj.src"
-          class="w-100"
-          aspect-ratio="4/3"
-          cover
-          style="height: 228px"
-          @error="count++"
-          @load="count++"
-        ></v-img>
+        <div class="slot-div ratio-16-9">
+          <img :data-src="proj.src" class="lazyload" />
+        </div>
         <v-card-title>{{ proj.title }}</v-card-title>
         <v-card-text>{{ proj.text }} </v-card-text>
       </v-card>
     </div>
-    <div class="plans">
+    <div class="plans" :class="{ mobile: isMobile() }">
       <div class="plan py-4 elevation-3">
         <v-icon icon="mdi-handshake-outline"></v-icon>
         <span>SERVICES | 服务</span>
@@ -94,8 +87,12 @@
         >Contact Me 联系我</v-btn
       >
     </div>
-    <v-sheet class="questions-wrap" color="grey-darken-3">
-      <div class="questions">
+    <v-sheet
+      class="questions-wrap"
+      color="grey-darken-3"
+      :class="{ mobile: isMobile() }"
+    >
+      <div class="questions" :class="{ mobile: isMobile() }">
         <div class="explain">
           <span>FAQs | 常见问题</span>
           <span
@@ -135,7 +132,8 @@
 
 <script lang="ts" setup>
 import { useAnimate } from "@/hooks/animate";
-import { openLink } from "@/hooks/pureFun";
+import { isMobile } from "@/utils/is";
+import { openLink } from "@/utils/pureFun";
 
 const router = useRouter();
 const {
@@ -152,19 +150,19 @@ const {
 const faqLists = ref([]);
 const projects = ref([
   {
-    src: "https://r2.jimi1126.cn/img/2024/09/05f59acacb734550b7786e16d89fdad2.jpg",
+    src: "https://r2.jimi1126.cn/hotlink-ok/img/2024/09/5a07b3ba8c068e56eafc2e03d1d3f379.jpg",
     title: "Jimi Blog",
     text: "一个用 Nuxtjs 搭建的个人博客，能快速搭建自己的博客，主题好看，集成SEO，以及能够自动发布 ",
     link: "https://blog.jimi1126.cn",
   },
   {
-    src: "https://r2.jimi1126.cn/img/2024/09/a121447b3ba241938e5454b9fec52c87.jpg",
+    src: "https://r2.jimi1126.cn/hotlink-ok/img/2024/09/a121447b3ba241938e5454b9fec52c87.jpg",
     title: "Markdown Processer",
     text: "一个通过插件方式实现 Markdown 的编辑与转换为 HTML 的网页应用",
     link: "https://md.jimi1126.cn",
   },
   {
-    src: "https://r2.jimi1126.cn/img/2024/09/5a07b3ba8c068e56eafc2e03d1d3f379.jpg",
+    src: "https://r2.jimi1126.cn/hotlink-ok/img/2024/09/05f59acacb734550b7786e16d89fdad2.jpg",
     title: "Unitest",
     text: "可以根据特定注解格式生成测试文件的 CLI",
     link: "https://github.com/Jimi1126/unitest",
@@ -176,6 +174,8 @@ function setAnimate() {
   gsapCtx.revert();
   gsapCtx.add(() => {
     buildScrollAnimate("#main .header .introduce > *", animateL2R);
+    buildScrollAnimate(`#main .header img`, animateT2B);
+    buildScrollAnimate(`#main .projects .v-card`, animateTT2B, true);
     buildScrollAnimate("#main .plans  > *", animateTB2T, true);
     buildScrollAnimate("#main .contact", animateB2T);
     buildScrollAnimate("#main .questions .explain", animateL2R);
@@ -183,27 +183,7 @@ function setAnimate() {
   });
 }
 
-function animateImg() {
-  nextTick(() => {
-    gsapCtx.add(() => {
-      buildScrollAnimate(`#main .header .v-img`, animateT2B);
-    });
-  });
-}
-
-const count = ref(0);
-const isMounted = ref(false);
-watchEffect(() => {
-  if (count.value == 3 && isMounted.value) {
-    nextTick(() => {
-      gsapCtx.add(() => {
-        buildScrollAnimate(`#main .projects .v-card`, animateTT2B, true);
-      });
-    });
-  }
-});
 onMounted(() => {
-  isMounted.value = true;
   setAnimate();
 });
 onUnmounted(() => {
@@ -214,34 +194,65 @@ onUnmounted(() => {
 .main {
   display: flex;
   flex-direction: column;
-  gap: $space-page;
+  gap: var(--space-page);
   align-items: center;
   text-transform: capitalize;
   font-style: normal;
   text-decoration: none;
-  line-height: 1em;
-  letter-spacing: 1px;
+  letter-spacing: 0.1rem;
+
+  .slot-div {
+    width: 100%;
+    position: relative;
+    height: 0;
+
+    &.ratio-16-9 {
+      padding-top: 56.25%;
+    }
+
+    &.ratio-4-3 {
+      padding-top: 75%;
+    }
+
+    &.ratio-1-1 {
+      padding-top: 100%;
+    }
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 
   .header {
     display: grid;
     grid-template-columns: 1fr 2fr;
     justify-items: center;
-    margin-top: $space-page;
+    margin-top: var(--space-page);
     width: 100%;
-    max-width: $max-width;
-    gap: $space-component;
+    max-width: var(--max-width);
+    gap: var(--space-component);
+
+    &.mobile {
+      grid-template-columns: 1fr;
+      align-items: center;
+    }
 
     .introduce {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      gap: $space-content;
+      gap: var(--space-content);
 
       .greet h1 {
-        font-size: 60px;
+        font-size: var(--font-size-xxl);
         font-weight: 400;
         line-height: 1.2em;
-        letter-spacing: 0px;
+        letter-spacing: 0;
       }
 
       .about-me {
@@ -249,17 +260,17 @@ onUnmounted(() => {
       }
 
       p {
-        font-size: 19px;
+        font-size: var(--font-size-m);
         font-weight: 300;
         text-transform: none;
-        line-height: 1.5em;
-        letter-spacing: 1.5px;
+        line-height: 1.5;
+        letter-spacing: 0.1rem;
       }
 
       .actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: $space-text;
+        gap: var(--space-text);
         width: 80%;
       }
     }
@@ -268,21 +279,27 @@ onUnmounted(() => {
   .projects {
     display: grid;
     width: 100%;
-    max-width: $max-width;
+    max-width: var(--max-width);
     grid-template-columns: repeat(3, 1fr);
-    gap: $space-component;
+    gap: var(--space-component);
+
+    &.mobile {
+      grid-template-columns: 1fr;
+    }
+
     .v-card-title {
-      font-size: 19px;
+      font-size: var(--font-size-m);
       font-weight: 500;
       text-transform: none;
-      line-height: 1.5em;
+      line-height: 1.5;
       letter-spacing: 1px;
     }
+
     .v-card-text {
-      font-size: 16px;
+      font-size: var(--font-size-base);
       font-weight: 300;
       text-transform: none;
-      line-height: 1.5em;
+      line-height: 1.5;
       letter-spacing: 1px;
     }
   }
@@ -290,29 +307,33 @@ onUnmounted(() => {
   .plans {
     display: grid;
     width: 100%;
-    max-width: $max-width;
+    max-width: var(--max-width);
     grid-template-columns: repeat(4, 1fr);
-    gap: $space-content;
+    gap: var(--space-content);
     text-transform: none;
-    line-height: 1.5em;
+    line-height: 1.5;
     letter-spacing: 1px;
+
+    &.mobile {
+      grid-template-columns: 1fr;
+    }
 
     .plan {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: $space-content;
+      gap: var(--space-content);
 
       .v-icon {
-        font-size: 64px;
+        font-size: var(--font-size-xxl);
       }
 
       span:first-of-type {
-        font-size: 22px;
+        font-size: var(--font-size-m);
         font-weight: 500;
       }
       span:last-of-type {
-        font-size: 16px;
+        font-size: var(--font-size-base);
         font-weight: 300;
       }
     }
@@ -321,25 +342,25 @@ onUnmounted(() => {
   .contact {
     display: flex;
     width: 100%;
-    max-width: $max-width;
+    max-width: var(--max-width);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: $space-component;
-    padding: 64px;
+    gap: var(--space-component);
+    padding: var(--space-page);
 
     p {
       position: relative;
       text-align: center;
-      font-size: 32px;
+      font-size: var(--font-size-l);
       font-weight: 400;
       text-transform: capitalize;
       font-style: normal;
       text-decoration: none;
-      line-height: 44px;
+      line-height: 1.2;
       letter-spacing: 1px;
       span {
-        font-size: 28px;
+        font-size: var(--font-size-m);
         font-weight: 300;
         color: #9e9e9e;
       }
@@ -369,67 +390,72 @@ onUnmounted(() => {
   .questions-wrap {
     width: 100%;
     height: fit-content;
-    padding: $space-page 0;
+    padding: var(--space-page) 0;
   }
 
   .questions {
     display: grid;
     width: 100%;
-    max-width: $max-width;
+    max-width: var(--max-width);
     grid-template-columns: 1fr 2fr;
-    gap: 84px;
+    gap: var(--space-page);
     margin: auto;
+
+    &.mobile {
+      grid-template-columns: 1fr;
+    }
 
     .explain {
       display: flex;
       flex-direction: column;
-      gap: $space-text;
+      gap: var(--space-text);
 
       span:nth-child(1) {
-        font-size: 46px;
+        font-size: var(--font-size-l);
         font-weight: 600;
         text-transform: capitalize;
         font-style: normal;
         text-decoration: none;
-        line-height: 1.2em;
-        letter-spacing: 0px;
+        line-height: 1.2;
+        letter-spacing: 1px;
         -webkit-text-stroke-color: #000;
         stroke: #000;
       }
 
       span:nth-child(n + 2) {
-        font-size: 15px;
+        font-size: var(--font-size-base);
         font-weight: 300;
         text-transform: none;
         font-style: normal;
         text-decoration: none;
         text-wrap: wrap;
         word-break: break-all;
-        line-height: 1.5em;
+        line-height: 1.5;
+        letter-spacing: 1px;
       }
     }
 
     .list {
       height: fit-content;
-      gap: $space-component;
+      gap: var(--space-component);
       .v-expansion-panel {
         border-radius: 0;
       }
       :deep(.v-expansion-panel-title) {
-        font-size: 22px;
+        font-size: var(--font-size-m);
         font-weight: 500;
         text-transform: none;
         font-style: normal;
         text-decoration: none;
-        line-height: 1.5em;
+        line-height: 1.5;
       }
       :deep(.v-expansion-panel-text) {
-        font-size: 18px;
+        font-size: var(--font-size-base);
         font-weight: 300;
         text-transform: none;
         font-style: normal;
         text-decoration: none;
-        line-height: 1.6em;
+        line-height: 1.5;
       }
     }
   }

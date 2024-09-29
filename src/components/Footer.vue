@@ -1,7 +1,7 @@
 <template>
   <v-footer pad-top="3" absolute bottom :color="primaryColor">
-    <div class="main">
-      <div class="introduce">
+    <div class="main" :class="{ mobile: isMobile() }">
+      <div class="introduce" :class="{ mobile: isMobile() }">
         <v-img
           :width="120"
           aspect-ratio="1/1"
@@ -15,7 +15,7 @@
         >
         <span>Copyright &copy;2024 JIMI1126, All rights reserved</span>
       </div>
-      <div class="business">
+      <div class="business" :class="{ mobile: isMobile() }">
         <div class="item">
           <span>SERVICES | 服务</span>
           <span>PC端应用</span>
@@ -42,7 +42,7 @@
           <span>网易云音乐</span>
           <span>喜马拉雅</span>
         </div>
-        <div class="links">
+        <div class="links" :class="{ mobile: isMobile() }">
           <v-btn
             icon="mdi-wechat"
             variant="tonal"
@@ -84,7 +84,9 @@
 
 <script lang="ts" setup>
 import { useDark } from "@/hooks/dark";
-import { openLink } from "@/hooks/pureFun";
+import { isMobile } from "@/utils/is";
+import { openLink } from "@/utils/pureFun";
+
 const { primaryColor } = useDark();
 const wechatQRVisible = ref(false);
 </script>
@@ -96,20 +98,28 @@ footer {
   .main {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: $space-component;
-    padding: $space-page $space-page $space-content $space-page;
+    gap: var(--space-component);
+    padding: var(--space-page) var(--space-page) var(--space-content)
+      var(--space-page);
+
+    &.mobile {
+      grid-template-columns: 1fr;
+    }
 
     .introduce {
       display: flex;
       flex-direction: column;
-      gap: $space-content;
+      gap: var(--space-content);
+      &.mobile {
+        align-items: center;
+      }
       span {
-        font-size: 16px;
+        font-size: var(--font-size-base);
         font-weight: 300;
         line-height: 1.6em;
       }
       span:last-child {
-        font-size: 14px;
+        font-size: var(--font-size-s);
       }
     }
 
@@ -118,18 +128,21 @@ footer {
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: auto max-content;
       justify-items: center;
-      gap: $space-content;
+      gap: var(--space-content);
+      &.mobile {
+        grid-template-columns: 1fr;
+      }
       .item {
         display: flex;
         flex-direction: column;
 
         span:nth-child(1) {
-          font-size: 18px;
+          font-size: var(--font-size-m);
           font-weight: 500;
           line-height: 2em;
         }
         span:nth-child(n + 2) {
-          font-size: 16px;
+          font-size: var(--font-size-base);
           color: #ccc;
           font-weight: 300;
           line-height: 1.6em;
@@ -141,7 +154,12 @@ footer {
         justify-self: end;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: $space-text;
+        gap: var(--space-text);
+        &.mobile {
+          grid-column-start: span 1;
+          justify-self: unset;
+          gap: 80px;
+        }
       }
     }
   }
@@ -150,8 +168,8 @@ footer {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 48px;
-    font-size: 14px;
+    height: 3rem;
+    font-size: var(--font-size-s);
     opacity: 0.8;
     span:hover {
       cursor: pointer;
