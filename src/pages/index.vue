@@ -151,6 +151,12 @@ const faqLists = ref([]);
 const projects = ref([
   {
     src: "https://r2.jimi1126.cn/hotlink-ok/img/2024/09/5a07b3ba8c068e56eafc2e03d1d3f379.jpg",
+    title: "FrontEnd Stack",
+    text: "前端开发需要具备的知识体系，以及一些开发工具的整理",
+    link: "https://front-end-stack.pages.dev/",
+  },
+  {
+    src: "https://r2.jimi1126.cn/hotlink-ok/img/2024/09/05f59acacb734550b7786e16d89fdad2.jpg",
     title: "Jimi Blog",
     text: "一个用 Nuxtjs 搭建的个人博客，能快速搭建自己的博客，主题好看，集成SEO，以及能够自动发布 ",
     link: "https://blog.jimi1126.cn",
@@ -160,12 +166,6 @@ const projects = ref([
     title: "Markdown Processer",
     text: "一个通过插件方式实现 Markdown 的编辑与转换为 HTML 的网页应用",
     link: "https://md.jimi1126.cn",
-  },
-  {
-    src: "https://r2.jimi1126.cn/hotlink-ok/img/2024/09/05f59acacb734550b7786e16d89fdad2.jpg",
-    title: "Unitest",
-    text: "可以根据特定注解格式生成测试文件的 CLI",
-    link: "https://github.com/Jimi1126/unitest",
   },
 ]);
 
